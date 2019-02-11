@@ -69,6 +69,48 @@ namespace Lib
 
             return sb.ToString();
         }
+
+        public static string CreateId(string sInputMax, int iLenght, string sPrefix)
+        {
+            if (sInputMax == null || (sInputMax != null && sInputMax == ""))
+            {
+                sInputMax = "0";
+            }
+            else
+            {
+                string[] list = sInputMax.Split('.');
+                if (list.Length > 0)
+                {
+                    sInputMax = list[list.Length - 1];
+                }
+                else
+                {
+                    sInputMax = "0";
+                }
+            }
+            try
+            {
+                string sOut = "";
+                int iCurId = int.Parse(sInputMax);
+                if (iCurId <= 0)
+                    iCurId = 1;
+                else
+                    iCurId = iCurId + 1;
+                sOut = iCurId.ToString();
+                int iMustLenght = iLenght - sOut.Length;
+                for (int i = 0; i < iMustLenght; i++)
+                {
+                    sOut = "0" + sOut;
+                }
+                return sPrefix + "." + sOut;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+       
+      
     }
     public static class Constants
     {

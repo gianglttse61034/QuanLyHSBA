@@ -30,6 +30,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Interface, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\QuanLyHoSo\bin\Debug\Interface.dll</HintPath>
+    </Reference>
+    <Reference Include="Lib, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\QuanLyHoSo\bin\Debug\Lib.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -44,13 +52,13 @@
     <Compile Include="DO\NhapKho.cs" />
     <Compile Include="DO\Permission.cs" />
     <Compile Include="DO\User.cs" />
+    <Compile Include="DO\XuatKho.cs" />
+    <Compile Include="Report\IReport.cs" />
     <Compile Include="Validate.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QueryData.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Report\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\DAL\DAL\DAL.csproj">
       <Project>{9015009e-ae4b-4fd4-9a25-3636176127b1}</Project>

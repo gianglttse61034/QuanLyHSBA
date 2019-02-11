@@ -7,6 +7,7 @@ using System.Text;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using BLL;
 using DevExpress.XtraEditors;
 using DevExpress.XtraGrid;
 using BLL.DO;
@@ -14,6 +15,7 @@ using DevExpress.XtraLayout.Utils;
 using Lib;
 using DevExpress.XtraGrid.Views.Grid;
 using DevExpress.Utils;
+using DevExpress.XtraEditors.Mask;
 
 namespace Interface
 {
@@ -22,6 +24,7 @@ namespace Interface
         private ActionStatus currentActionStatus;
         private NhapKho obj;
         private DataTable dtKHO;
+        private int currentHandle;
         public enum ActionStatus
         {
             Normal = 0,
@@ -42,8 +45,9 @@ namespace Interface
         }
         public void LoadData()
         {
-            ChangeControlStatus(ActionStatus.Normal);
-            LoadLayout();}
+            LoadLayout();
+            txtBirthDay.Properties.MaxLength = 4;
+        }
         public void ShownData()
         {
             DataTable dt = new DataTable();
@@ -55,12 +59,7 @@ namespace Interface
             bw.RunWorkerCompleted += delegate
             {
                 frmWait.Close();
-                gridControl1.BeginUpdate();
-                gridControl1.DataSource = null;
-                gridControl1.DataSource = dt;
-                gridView1.BestFitColumns();
-                gridControl1.EndUpdate();
-
+                
                 searchLookUpEdit1.Properties.View.Columns.Clear();
                 searchLookUpEdit1.Properties.View.Columns.Add((GridHelper.getInstance().Format("master_data_name", "Tên", GridHelper.GridHelperType.TextEdit, "", 0, 0)));
                 searchLookUpEdit1.Properties.View.Columns.Add((GridHelper.getInstance().Format("freefield1", "STT", GridHelper.GridHelperType.TextEdit, "", 0, 0)));
@@ -70,6 +69,14 @@ namespace Interface
                 searchLookUpEdit1.Properties.DisplayMember = "master_data_name";
                 searchLookUpEdit1.Properties.ValueMember = "master_data_id";
                 searchLookUpEdit1.Properties.DataSource = dtKHO;
+                gridControl1.BeginUpdate();
+                gridControl1.DataSource = null;
+                gridControl1.DataSource = dt;
+                gridView1.BestFitColumns();
+                gridControl1.EndUpdate();
+
+                ChangeControlStatus(ActionStatus.Normal);
+                
             };
             bw.RunWorkerAsync();
             frmWait.ShowDialog();
@@ -88,12 +95,14 @@ namespace Interface
                 gridView1.OptionsView.ColumnAutoWidth = false;
                 gridView1.Columns.Clear();
                 gridView1.Columns.Add(GridHelper.getInstance().Format("id", "Họ và tên", GridHelper.GridHelperType.TextEdit, "", 0, 0, false));
+                gridView1.Columns.Add(GridHelper.getInstance().Format("soct", "Số chứng từ", GridHelper.GridHelperType.TextEdit));
+                gridView1.Columns.Add(GridHelper.getInstance().Format("soct_xuat", "Số chứng từ Xuất", GridHelper.GridHelperType.TextEdit));
+                gridView1.Columns.Add(GridHelper.getInstance().Format("stt", "Số Kho", GridHelper.GridHelperType.TextEdit));
                 gridView1.Columns.Add(GridHelper.getInstance().Format("name", "Họ và tên", GridHelper.GridHelperType.TextEdit));
                 gridView1.Columns.Add(GridHelper.getInstance().Format("birth_day", "Ngày sinh", GridHelper.GridHelperType.TextEdit));
                 gridView1.Columns.Add(GridHelper.getInstance().Format("id_ticket_hospital", "Số vào viện", GridHelper.GridHelperType.TextEdit));
                 gridView1.Columns.Add(GridHelper.getInstance().Format("id_luu_tru", "Số lưu trữ", GridHelper.GridHelperType.TextEdit));
-                gridView1.Columns.Add(GridHelper.getInstance().Format("kho_name", "Kho", GridHelper.GridHelperType.TextEdit)); 
-                //gridView1.Columns.Add(GridHelper.getInstance().FormatLookupEdit("id_kho", "Kho",dtKHO,"master_data_id","master_data_name"));
+                gridView1.Columns.Add(GridHelper.getInstance().Format("kho_name", "Kho", GridHelper.GridHelperType.TextEdit));
                 gridView1.Columns.Add(GridHelper.getInstance().Format("create_date", "Ngày tạo", GridHelper.GridHelperType.DateTime, Constants.DateTimeFormat));
                 gridView1.Columns.Add(GridHelper.getInstance().Format("create_by", "Người tạo", GridHelper.GridHelperType.TextEdit));
                 gridView1.Columns.Add(GridHelper.getInstance().Format("update_date", "Ngày chỉnh sửa", GridHelper.GridHelperType.DateTime, Constants.DateTimeFormat));
@@ -102,8 +111,7 @@ namespace Interface
                 gridView1.EndUpdate();
             }
         }
-        private void SetDataRowToObject(DataRow row)
-        {
+        private void SetDataRowToObject(DataRow row){
             obj = new NhapKho();
             try
             {
@@ -112,11 +120,16 @@ namespace Interface
                 obj.Birthday = row["birth_day"] != null && !row["birth_day"].Equals(DBNull.Value) ? row["birth_day"].ToString() : "";
                 obj.Tickethospital = row["id_ticket_hospital"] != null && !row["id_ticket_hospital"].Equals(DBNull.Value) ? row["id_ticket_hospital"].ToString() : "";
                 obj.Luutru = row["id_luu_tru"] != null && !row["id_luu_tru"].Equals(DBNull.Value) ? row["id_luu_tru"].ToString() : "";
+                obj.Kho = row["id_kho"] != null && !row["id_kho"].Equals(DBNull.Value) ? row["id_kho"].ToString() : "";
+                obj.Stt = row["stt"] != null && !row["stt"].Equals(DBNull.Value) ? row["stt"].ToString() : "";
+                obj.Soct = row["soct"] != null && !row["soct"].Equals(DBNull.Value) ? row["soct"].ToString() : "";
+                obj.Description = row["description"] != null && !row["description"].Equals(DBNull.Value) ? row["description"].ToString() : "";
                 obj.Createby = row["create_by"] != null && !row["create_by"].Equals(DBNull.Value) ? row["create_by"].ToString() : "";
+
                 obj.Createdate = row["create_date"] != null && !row["create_date"].Equals(DateTime.MinValue) ? Convert.ToDateTime(row["create_date"]) : DateTime.MinValue;
-                obj.Updatedate = row["update_date"] != null && !row["update_date"].Equals(DateTime.MinValue) ? Convert.ToDateTime(row["update_date"]) : DateTime.MinValue;
-                obj.Updateby = row["update_by"] != null && !row["update_by"].Equals(DBNull.Value) ? row["update_by"].ToString() : "";
                 obj.Isused = Convert.ToInt16(row["is_used"]);
+                obj.Updateby = row["update_by"] != null && !row["update_by"].Equals(DBNull.Value) ? row["update_by"].ToString() : "";
+                obj.Updatedate = row["update_date"] != null && !row["update_date"].Equals(DateTime.MinValue) ? Convert.ToDateTime(row["update_date"]) : DateTime.MinValue;
             }
             catch (Exception)
             {
@@ -139,20 +152,21 @@ namespace Interface
                 obj.Updateby = DataAccount.User.UserId;
                 obj.Kho = searchLookUpEdit1.EditValue.ToString();
                 obj.Description = txtGhiChu.Text;
+                obj.Stt = txtSoLuuKho.Text;
+                obj.Soct = txtSoCT.Text;
             }
             catch (Exception)
             {
 
             }
-        }
-        private void RefeshData()
+        }private void RefeshData()
         {
             DataTable dt = new DataTable();
             dtKHO = new DataTable();
             BackgroundWorker bw = new BackgroundWorker();
             frmWaiting frmWait = new frmWaiting { StartPosition = FormStartPosition.CenterScreen };
             bw.DoWork += delegate { dt = BLL.QueryData.getInstance().getNhapKho(); };
-            bw.DoWork += delegate { dtKHO = BLL.QueryData.getInstance().getListKho(true); };
+            //bw.DoWork += delegate { dtKHO = BLL.QueryData.getInstance().getListKho(true); };
             bw.RunWorkerCompleted += delegate
             {
                 frmWait.Close();
@@ -161,7 +175,7 @@ namespace Interface
                 gridControl1.DataSource = dt;
                 gridView1.BestFitColumns();
                 gridControl1.EndUpdate();
-                searchLookUpEdit1.Properties.DataSource = dtKHO;
+                //searchLookUpEdit1.Properties.DataSource = dtKHO;
             };
             bw.RunWorkerAsync();
             frmWait.ShowDialog();
@@ -175,8 +189,10 @@ namespace Interface
                 txtLuuTru.Text = obj.Luutru;
                 txtTicketHospital.Text = obj.Tickethospital;
                 txtBirthDay.Text = obj.Birthday;
-                searchLookUpEdit1.EditValue = obj.Kho;
+                searchLookUpEdit1.EditValue = obj.Kho.ToUpper();
                 txtGhiChu.Text = obj.Description;
+                txtSoLuuKho.Text = obj.Stt;
+                txtSoCT.Text = obj.Soct;
             }
         }
         private void ChangeControlStatus(ActionStatus status)
@@ -205,6 +221,8 @@ namespace Interface
                     txtLuuTru.ReadOnly = true;
                     txtTicketHospital.ReadOnly = true;
                     searchLookUpEdit1.ReadOnly = true;
+                    txtSoLuuKho.ReadOnly = true;
+                    txtSoCT.ReadOnly = true;
                     break;
                 case ActionStatus.Update:
                     layoutCancle.Visibility = LayoutVisibility.Always;
@@ -218,6 +236,8 @@ namespace Interface
                     txtLuuTru.ReadOnly = false;
                     txtTicketHospital.ReadOnly = false;
                     searchLookUpEdit1.ReadOnly = false;
+                    txtSoLuuKho.ReadOnly = true;
+                    txtSoCT.ReadOnly = true;
                     break;
                 case ActionStatus.AddNew:
                     layoutCancle.Visibility = LayoutVisibility.Always;
@@ -232,6 +252,8 @@ namespace Interface
                     txtLuuTru.ReadOnly = false;
                     txtTicketHospital.ReadOnly = false;
                     searchLookUpEdit1.ReadOnly = false;
+                    txtSoLuuKho.ReadOnly = true;
+                    txtSoCT.ReadOnly = true;
                     break;
             }
         }
@@ -240,7 +262,23 @@ namespace Interface
         private void btnNew_Click(object sender, EventArgs e)
         {
             ChangeControlStatus(ActionStatus.AddNew);
+            clearControl();
+            //Lấy số ct
+            txtSoCT.Text = QueryData.autoCreatedHandleId(DateTime.Now.ToString("yyMMdd"), "soct", QueryData.tableNhapKho);
         }
+
+        private void clearControl()
+        {
+            txtSoLuuKho.Text = "";
+            txtBirthDay.Text = "";
+            txtGhiChu.Text = "";
+            txtName.Text = "";
+            txtSoCT.Text = "";
+            txtSoLuuKho.Text = "";
+            txtTicketHospital.Text = "";
+            searchLookUpEdit1.EditValue = "";
+        }
+
         private void btnEdit_Click(object sender, EventArgs e)
         {
             ChangeControlStatus(ActionStatus.Update);
@@ -265,8 +303,7 @@ namespace Interface
                     }
                 }
             }
-        }
-        private void btnSave_Click(object sender, EventArgs e)
+        }private void btnSave_Click(object sender, EventArgs e)
         {
             if (currentActionStatus == ActionStatus.Normal) return;
             if (currentActionStatus == ActionStatus.Update)
@@ -303,6 +340,16 @@ namespace Interface
         private void btnCancle_Click(object sender, EventArgs e)
         {
             ChangeControlStatus(ActionStatus.Normal);
+            if (gridView1.RowCount > 0)
+            {
+                try
+                {
+                    LoadDataToControl();
+                }
+                catch (Exception)
+                {
+                }
+            }
         }
         private void btnRefesh_Click(object sender, EventArgs e)
         {
@@ -313,6 +360,7 @@ namespace Interface
             if (e.FocusedRowHandle != GridControl.AutoFilterRowHandle && e.FocusedRowHandle >= 0)
             {
                 DataRow row = gridView1.GetDataRow(e.FocusedRowHandle);
+                currentHandle = e.FocusedRowHandle;
                 if (row != null)
                 {
                     SetDataRowToObject(row);
@@ -322,11 +370,49 @@ namespace Interface
         }
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
+            if (keyData == Keys.Control && keyData == Keys.S && (currentActionStatus == ActionStatus.AddNew || currentActionStatus == ActionStatus.Update))
+            {
+                btnSave_Click(new object(), EventArgs.Empty);
+            }
+            if (keyData == Keys.Control && keyData == Keys.E && currentActionStatus == ActionStatus.Normal)
+            {
+                btnEdit_Click(new object(), EventArgs.Empty);
+            }
+            if (keyData == Keys.Control && keyData == Keys.N && currentActionStatus == ActionStatus.Normal)
+            {
+                btnNew_Click(new object(), EventArgs.Empty);
+            }
+            if (keyData == Keys.Escape && (currentActionStatus == ActionStatus.AddNew || currentActionStatus == ActionStatus.Update))
+            {
+                btnCancle_Click(new object(), EventArgs.Empty);
+            }
+            if (keyData == Keys.F5 && currentActionStatus == ActionStatus.Normal)
+            {
+                btnRefesh_Click(new object(), EventArgs.Empty);
+            }
+            if (keyData == Keys.Delete && currentActionStatus == ActionStatus.Normal)
+            {
+                btnDelete_Click(new object(), EventArgs.Empty);
+            }
             return base.ProcessCmdKey(ref msg, keyData);
         }
+
+        private void searchLookUpEdit1_EditValueChanged(object sender, EventArgs e)
+        {
+            if (currentActionStatus == ActionStatus.AddNew && dtKHO.Columns.Contains("master_data_id"))
+            {
+                dtKHO.DefaultView.RowFilter = $"master_data_id = '{searchLookUpEdit1.EditValue.ToString().ToLower()}'";
+                if (dtKHO.DefaultView.ToTable().Rows.Count > 0)
+                {
+                    DataRow row = dtKHO.DefaultView.ToTable().Rows[0];
+                    txtSoLuuKho.Text = QueryData.autoCreatedHandleId(row != null && row["kihieu"] != null ? row["kihieu"].ToString() : "KHO", "stt", QueryData.tableNhapKho);
+                }
+                dtKHO.DefaultView.RowFilter = string.Empty;
+            }
+        }
+
+
         #endregion
-
-
 
 
     }

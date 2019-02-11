@@ -43,6 +43,8 @@
     <Reference Include="DevExpress.XtraGrid.v18.1, Version=18.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="DevExpress.XtraLayout.v18.1, Version=18.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="DevExpress.XtraPrinting.v18.1, Version=18.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.XtraReports.v18.1, Version=18.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
+    <Reference Include="DevExpress.XtraReports.v18.1.Extensions, Version=18.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="DevExpress.XtraTreeList.v18.1, Version=18.1.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL" />
     <Reference Include="Lib, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -61,33 +63,58 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Danh Muc\frmDanhMuc.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Danh Muc\frmDanhMuc.Designer.cs">
+      <DependentUpon>frmDanhMuc.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Kho\frmNhapKho.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Kho\frmNhapKho.Designer.cs">
+      <DependentUpon>frmNhapKho.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Kho\frmXuatKho.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Kho\frmXuatKho.Designer.cs">
+      <DependentUpon>frmXuatKho.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Kho\UCNhapKho.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Kho\UCNhapKho.Designer.cs">
+      <DependentUpon>UCNhapKho.cs</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UserControl\Danh Muc\frmDanhMuc.cs">
-      <SubType>Form</SubType>
+    <Compile Include="Report\UCReport_LichSuHoSoBenhAn.cs">
+      <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserControl\Danh Muc\frmDanhMuc.Designer.cs">
-      <DependentUpon>frmDanhMuc.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UserControl\frmNhapKho.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="UserControl\frmNhapKho.Designer.cs">
-      <DependentUpon>frmNhapKho.cs</DependentUpon>
+    <Compile Include="Report\UCReport_LichSuHoSoBenhAn.Designer.cs">
+      <DependentUpon>UCReport_LichSuHoSoBenhAn.cs</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Danh Muc\frmDanhMuc.resx">
+      <DependentUpon>frmDanhMuc.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Kho\frmNhapKho.resx">
+      <DependentUpon>frmNhapKho.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Kho\frmXuatKho.resx">
+      <DependentUpon>frmXuatKho.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Kho\UCNhapKho.resx">
+      <DependentUpon>UCNhapKho.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\licenses.licx" />
-    <EmbeddedResource Include="UserControl\Danh Muc\frmDanhMuc.resx">
-      <DependentUpon>frmDanhMuc.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserControl\frmNhapKho.resx">
-      <DependentUpon>frmNhapKho.cs</DependentUpon>
+    <EmbeddedResource Include="Report\UCReport_LichSuHoSoBenhAn.resx">
+      <DependentUpon>UCReport_LichSuHoSoBenhAn.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Report\" />
-    <Folder Include="UserControl\Kho\" />
-    <Folder Include="UserControl\QuanLyTaiKhoan\" />
+    <Folder Include="QuanLyTaiKhoan\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

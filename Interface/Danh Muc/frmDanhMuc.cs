@@ -100,6 +100,10 @@ namespace Interface
                         col.Caption = "Tên";
                         col.Visible = true;
                         break;
+                    case "master_data_id":
+                        col.Caption = "Ký Hiệu";
+                        col.Visible = true;
+                        break;
                     case "freefield1":
                         col.Caption = "Thứ tự";
                         col.Visible = true;
@@ -144,7 +148,6 @@ namespace Interface
                     temp.Id = Guid.NewGuid().ToString().ToLower();
                     temp.Description = txtDescription.Text;
                     temp.MasterDataName = txtMasterDataName.Text;
-                    temp.MasterDataId = "";
                     temp.CreateBy = DataAccount.User.UserId;
                     temp.CreateDate = DateTime.Now;
                     temp.UpdateBy = DataAccount.User.UserId;
@@ -153,13 +156,14 @@ namespace Interface
                     temp.GroupId = "74c788c0-9c2f-44fc-9e1f-108f60a1909c"; // ID KHO LUU TRONG DATABASE
                     temp.IsUsed = 1;
                     temp.ParentId = lkpParentId.EditValue == null ? "" : lkpParentId.EditValue.ToString();
+                    temp.MasterDataId= txtKyHieu.Text;
                 }
 
                 if (currentActionStatus == ActionStatus.Update)
                 {
                     temp.Description = txtDescription.Text;
                     temp.MasterDataName = txtMasterDataName.Text;
-                    temp.MasterDataId = "";
+                    temp.MasterDataId = txtKyHieu.Text;
                     temp.CreateBy = obj.CreateBy;
                     temp.CreateDate = obj.CreateDate;
                     temp.UpdateBy = DataAccount.User.UserId;
@@ -218,6 +222,7 @@ namespace Interface
                 txtMasterDataName.Text = obj.MasterDataName;
                 lkpParentId.EditValue = obj.ParentId.ToUpper();
                 txtSTT.Text = obj.Freefield1;
+                txtKyHieu.Text= obj.MasterDataId ;
             }
         }
         private void ChangeControlStatus(ActionStatus status)

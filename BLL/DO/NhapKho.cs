@@ -19,7 +19,10 @@ namespace BLL.DO
         private string updateby;
         private string kho;
         private string description;
-
+        private string stt;
+        private string id_hdx;
+        private string soct;
+        private int flag;
         public NhapKho()
         {
 
@@ -91,6 +94,30 @@ namespace BLL.DO
         {
             get { return description; }
             set { description = value; }
+        }
+
+        public string Stt
+        {
+            get { return stt; }
+            set { stt = value; }
+        }
+
+        public string IdHdx
+        {
+            get { return id_hdx; }
+            set { id_hdx = value; }
+        }
+
+        public string Soct
+        {
+            get { return soct; }
+            set { soct = value; }
+        }
+
+        public int Flag
+        {
+            get { return flag; }
+            set { flag = value; }
         }
     }
 }
