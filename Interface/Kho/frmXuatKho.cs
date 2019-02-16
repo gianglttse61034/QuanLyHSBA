@@ -462,8 +462,17 @@ namespace Interface
             {
                 currentHandle = e.FocusedRowHandle;
                 DataRow row = gridView1.GetDataRow(e.FocusedRowHandle);
-                if (row != null)
+                
+                if (row != null )
                 {
+                    if (row["detail"] != null && row["detail"].ToString().Contains("Đã tái nhập kho:"))
+                    {
+                        btnNhapKho.Enabled = false;
+                    }
+                    else
+                    {
+                        btnNhapKho.Enabled = true;
+                    }
                     SetDataRowToObjectXuatKho(row);
                     //LoadDataToControl();
                     LoadNhapKhoToControl(objXuatKho.IdHdn);
