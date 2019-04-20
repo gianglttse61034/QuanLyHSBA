@@ -1,5 +1,5 @@
 ﻿
-namespace GPP_Application_HL
+namespace Lib
 {
     partial class FrmReport_WithoutTime
     {

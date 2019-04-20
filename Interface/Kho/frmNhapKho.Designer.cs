@@ -32,7 +32,6 @@
             this.groupControl2 = new DevExpress.XtraEditors.GroupControl();
             this.layoutControl1 = new DevExpress.XtraLayout.LayoutControl();
             this.txtSoCT = new DevExpress.XtraEditors.TextEdit();
-            this.txtSoLuuKho = new DevExpress.XtraEditors.TextEdit();
             this.txtGhiChu = new DevExpress.XtraEditors.TextEdit();
             this.searchLookUpEdit1 = new DevExpress.XtraEditors.SearchLookUpEdit();
             this.searchLookUpEdit1View = new DevExpress.XtraGrid.Views.Grid.GridView();
@@ -60,7 +59,6 @@
             this.layoutSave = new DevExpress.XtraLayout.LayoutControlItem();
             this.layoutCancle = new DevExpress.XtraLayout.LayoutControlItem();
             this.layoutControlItem6 = new DevExpress.XtraLayout.LayoutControlItem();
-            this.layoutControlItem7 = new DevExpress.XtraLayout.LayoutControlItem();
             this.layoutControlItem8 = new DevExpress.XtraLayout.LayoutControlItem();
             this.groupControl1 = new DevExpress.XtraEditors.GroupControl();
             this.gridControl1 = new DevExpress.XtraGrid.GridControl();
@@ -70,7 +68,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.layoutControl1)).BeginInit();
             this.layoutControl1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.txtSoCT.Properties)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txtSoLuuKho.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtGhiChu.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.searchLookUpEdit1.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.searchLookUpEdit1View)).BeginInit();
@@ -92,7 +89,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.layoutSave)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutCancle)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem6)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem7)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem8)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.groupControl1)).BeginInit();
             this.groupControl1.SuspendLayout();
@@ -115,7 +111,6 @@
             // layoutControl1
             // 
             this.layoutControl1.Controls.Add(this.txtSoCT);
-            this.layoutControl1.Controls.Add(this.txtSoLuuKho);
             this.layoutControl1.Controls.Add(this.txtGhiChu);
             this.layoutControl1.Controls.Add(this.searchLookUpEdit1);
             this.layoutControl1.Controls.Add(this.btnSave);
@@ -144,19 +139,11 @@
             this.txtSoCT.StyleController = this.layoutControl1;
             this.txtSoCT.TabIndex = 19;
             // 
-            // txtSoLuuKho
-            // 
-            this.txtSoLuuKho.Location = new System.Drawing.Point(1061, 33);
-            this.txtSoLuuKho.Name = "txtSoLuuKho";
-            this.txtSoLuuKho.Size = new System.Drawing.Size(60, 20);
-            this.txtSoLuuKho.StyleController = this.layoutControl1;
-            this.txtSoLuuKho.TabIndex = 18;
-            // 
             // txtGhiChu
             // 
             this.txtGhiChu.Location = new System.Drawing.Point(665, 33);
             this.txtGhiChu.Name = "txtGhiChu";
-            this.txtGhiChu.Size = new System.Drawing.Size(317, 20);
+            this.txtGhiChu.Size = new System.Drawing.Size(456, 20);
             this.txtGhiChu.StyleController = this.layoutControl1;
             this.txtGhiChu.TabIndex = 17;
             // 
@@ -170,7 +157,6 @@
             this.searchLookUpEdit1.Size = new System.Drawing.Size(504, 20);
             this.searchLookUpEdit1.StyleController = this.layoutControl1;
             this.searchLookUpEdit1.TabIndex = 16;
-            this.searchLookUpEdit1.EditValueChanged += new System.EventHandler(this.searchLookUpEdit1_EditValueChanged);
             // 
             // searchLookUpEdit1View
             // 
@@ -295,6 +281,8 @@
             this.txtTicketHospital.Size = new System.Drawing.Size(75, 22);
             this.txtTicketHospital.StyleController = this.layoutControl1;
             this.txtTicketHospital.TabIndex = 6;
+            this.txtTicketHospital.EditValueChanged += new System.EventHandler(this.txtTicketHospital_EditValueChanged);
+            this.txtTicketHospital.Validated += new System.EventHandler(this.txtTicketHospital_Validated);
             // 
             // txtName
             // 
@@ -324,7 +312,6 @@
             this.layoutSave,
             this.layoutCancle,
             this.layoutControlItem6,
-            this.layoutControlItem7,
             this.layoutControlItem8});
             this.layoutControlGroup1.Name = "Root";
             this.layoutControlGroup1.Padding = new DevExpress.XtraLayout.Utils.Padding(5, 5, 5, 5);
@@ -456,20 +443,9 @@
             this.layoutControlItem6.Control = this.txtGhiChu;
             this.layoutControlItem6.Location = new System.Drawing.Point(583, 26);
             this.layoutControlItem6.Name = "layoutControlItem6";
-            this.layoutControlItem6.Size = new System.Drawing.Size(396, 24);
+            this.layoutControlItem6.Size = new System.Drawing.Size(535, 24);
             this.layoutControlItem6.Text = "Ghi chú";
             this.layoutControlItem6.TextSize = new System.Drawing.Size(72, 18);
-            // 
-            // layoutControlItem7
-            // 
-            this.layoutControlItem7.AppearanceItemCaption.Font = new System.Drawing.Font("Tahoma", 10F);
-            this.layoutControlItem7.AppearanceItemCaption.Options.UseFont = true;
-            this.layoutControlItem7.Control = this.txtSoLuuKho;
-            this.layoutControlItem7.Location = new System.Drawing.Point(979, 26);
-            this.layoutControlItem7.Name = "layoutControlItem7";
-            this.layoutControlItem7.Size = new System.Drawing.Size(139, 24);
-            this.layoutControlItem7.Text = "Số Lưu Kho";
-            this.layoutControlItem7.TextSize = new System.Drawing.Size(72, 17);
             // 
             // layoutControlItem8
             // 
@@ -518,6 +494,7 @@
             this.ClientSize = new System.Drawing.Size(1132, 588);
             this.Controls.Add(this.groupControl1);
             this.Controls.Add(this.groupControl2);
+            this.KeyPreview = true;
             this.Name = "frmNhapKho";
             this.Text = "Nhập Kho HSBA";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
@@ -528,7 +505,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.layoutControl1)).EndInit();
             this.layoutControl1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.txtSoCT.Properties)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.txtSoLuuKho.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.txtGhiChu.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.searchLookUpEdit1.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.searchLookUpEdit1View)).EndInit();
@@ -550,7 +526,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.layoutSave)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutCancle)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem6)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem7)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.layoutControlItem8)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.groupControl1)).EndInit();
             this.groupControl1.ResumeLayout(false);
@@ -590,8 +565,6 @@
         private DevExpress.XtraLayout.LayoutControlItem layoutControlItem5;
         private DevExpress.XtraEditors.TextEdit txtGhiChu;
         private DevExpress.XtraLayout.LayoutControlItem layoutControlItem6;
-        private DevExpress.XtraEditors.TextEdit txtSoLuuKho;
-        private DevExpress.XtraLayout.LayoutControlItem layoutControlItem7;
         private DevExpress.XtraEditors.TextEdit txtSoCT;
         private DevExpress.XtraLayout.LayoutControlItem layoutControlItem8;
         private DevExpress.XtraEditors.GroupControl groupControl1;

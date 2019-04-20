@@ -14,6 +14,9 @@ namespace BLL.DO
         private string freefield1;
         private string freefield2;
         private string freefield3;
+        private string freefield4;
+        private string freefield5;
+        private string freefield6;
         private DateTime create_date;
         private string create_by;
         private DateTime update_date;
@@ -121,6 +124,24 @@ namespace BLL.DO
         {
             get { return parentId; }
             set { parentId = value; }
+        }
+
+        public string Freefield4
+        {
+            get { return freefield4; }
+            set { freefield4 = value; }
+        }
+
+        public string Freefield5
+        {
+            get { return freefield5; }
+            set { freefield5 = value; }
+        }
+
+        public string Freefield6
+        {
+            get { return freefield6; }
+            set { freefield6 = value; }
         }
     }
 }

@@ -661,6 +661,7 @@
             this.ClientSize = new System.Drawing.Size(1132, 588);
             this.Controls.Add(this.groupControl1);
             this.Controls.Add(this.groupControl2);
+            this.KeyPreview = true;
             this.Name = "frmXuatKho";
             this.Text = "Xuất Kho HSBA";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;

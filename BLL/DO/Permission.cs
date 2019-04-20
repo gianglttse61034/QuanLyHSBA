@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,6 +16,17 @@ namespace BLL.DO
         private int allowNew;
         private int allowPrint;
         private int allowExport;
+
+        public Permission()
+        {
+            Id = "";
+            UserId = "";
+            PermissionName = "";
+            AllowEdit = 0;
+            AllowNew = 0;
+            AllowPrint = 0;
+            AllowExport = 0;
+        }
 
         public string Id
         {
@@ -56,6 +68,54 @@ namespace BLL.DO
         {
             get { return allowExport; }
             set { allowExport = value; }
+        }
+
+        
+    }
+
+    public class Resource
+    {
+        private string id;
+        private string resource_id;
+        private int priority;
+        private int group_id;
+        private int parent_id;
+        private int is_used;
+
+        public string Id
+        {
+            get { return id; }
+            set { id = value; }
+        }
+
+        public string ResourceId
+        {
+            get { return resource_id; }
+            set { resource_id = value; }
+        }
+
+        public int Priority
+        {
+            get { return priority; }
+            set { priority = value; }
+        }
+
+        public int GroupId
+        {
+            get { return group_id; }
+            set { group_id = value; }
+        }
+
+        public int ParentId
+        {
+            get { return parent_id; }
+            set { parent_id = value; }
+        }
+
+        public int IsUsed
+        {
+            get { return is_used; }
+            set { is_used = value; }
         }
     }
 }

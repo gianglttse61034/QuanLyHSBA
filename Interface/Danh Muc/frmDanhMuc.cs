@@ -86,6 +86,7 @@ namespace Interface
         {
             treeList1.OptionsBehavior.PopulateServiceColumns = true;
             treeList1.OptionsBehavior.EnableFiltering = true;
+            treeList1.OptionsBehavior.AutoNodeHeight = true;
             treeList1.KeyFieldName = "id";
             treeList1.ParentFieldName = "parent_id";
             foreach (DevExpress.XtraTreeList.Columns.TreeListColumn col in treeList1.Columns)
@@ -110,6 +111,18 @@ namespace Interface
                         break;
                     case "description":
                         col.Caption = "Ghi chú";
+                        col.Visible = true;
+                        break;
+                    case "freefield4":
+                        col.Caption = "Min số vào viện";
+                        col.Visible = true;
+                        break;
+                    case "freefield5":
+                        col.Caption = "Max số vào viện";
+                        col.Visible = true;
+                        break;
+                    case "freefield6":
+                        col.Caption = "Năm áp dụng";
                         col.Visible = true;
                         break;
 
@@ -137,6 +150,21 @@ namespace Interface
             obj.Freefield1 = node["freefield1"] == null || node["freefield1"].Equals(DBNull.Value) ? "" : node["freefield1"].ToString(); // Số thứ tự. Tự đặt
             obj.Freefield2 = node["freefield2"] == null || node["freefield2"].Equals(DBNull.Value) ? "" : node["freefield2"].ToString(); // Tên hiển thi combobox
             obj.Freefield3 = node["freefield3"] == null || node["freefield3"].Equals(DBNull.Value) ? "" : node["freefield3"].ToString();// Level
+            obj.MasterDataId = node["master_data_id"] == null || node["master_data_id"].Equals(DBNull.Value) ? "" : node["master_data_id"].ToString();// Ký hiệu
+            if (node["freefield4"] != null || !node["freefield4"].Equals(DBNull.Value))
+            {
+                obj.Freefield4 = node["freefield4"].ToString();
+            }
+            if (node["freefield5"] != null || !node["freefield5"].Equals(DBNull.Value))
+            {
+                obj.Freefield5 = node["freefield5"].ToString();
+            }
+            if (node["freefield6"] != null || !node["freefield5"].Equals(DBNull.Value))
+            {
+                obj.Freefield6 = node["freefield6"].ToString();
+            }
+
+
         }
         private MasterData SetDataFromControl()
         {
@@ -145,28 +173,35 @@ namespace Interface
             {
                 if (currentActionStatus == ActionStatus.AddNew)
                 {
+                    temp.Freefield6 = txtYear.Text;
+                    temp.Freefield4 = txtMin.Text;
+                    temp.Freefield5 = txtMax.Text;
                     temp.Id = Guid.NewGuid().ToString().ToLower();
                     temp.Description = txtDescription.Text;
                     temp.MasterDataName = txtMasterDataName.Text;
-                    temp.CreateBy = DataAccount.User.UserId;
+                    temp.CreateBy = BLL.DataAccount.User.UserId;
                     temp.CreateDate = DateTime.Now;
-                    temp.UpdateBy = DataAccount.User.UserId;
+                    temp.UpdateBy = BLL.DataAccount.User.UserId;
                     temp.UpdateDate = DateTime.Now;
                     temp.Freefield1 = txtSTT.Text;
+
                     temp.GroupId = "74c788c0-9c2f-44fc-9e1f-108f60a1909c"; // ID KHO LUU TRONG DATABASE
                     temp.IsUsed = 1;
                     temp.ParentId = lkpParentId.EditValue == null ? "" : lkpParentId.EditValue.ToString();
-                    temp.MasterDataId= txtKyHieu.Text;
+                    temp.MasterDataId = txtKyHieu.Text;
                 }
 
                 if (currentActionStatus == ActionStatus.Update)
                 {
+                    temp.Freefield6 = txtYear.Text;
+                    temp.Freefield4 = txtMin.Text;
+                    temp.Freefield5 = txtMax.Text;
                     temp.Description = txtDescription.Text;
                     temp.MasterDataName = txtMasterDataName.Text;
                     temp.MasterDataId = txtKyHieu.Text;
                     temp.CreateBy = obj.CreateBy;
                     temp.CreateDate = obj.CreateDate;
-                    temp.UpdateBy = DataAccount.User.UserId;
+                    temp.UpdateBy = BLL.DataAccount.User.UserId;
                     temp.UpdateDate = DateTime.Now;
                     temp.Freefield1 = txtSTT.Text;
                     temp.Freefield2 = obj.Freefield2;
@@ -222,7 +257,10 @@ namespace Interface
                 txtMasterDataName.Text = obj.MasterDataName;
                 lkpParentId.EditValue = obj.ParentId.ToUpper();
                 txtSTT.Text = obj.Freefield1;
-                txtKyHieu.Text= obj.MasterDataId ;
+                txtKyHieu.Text = obj.MasterDataId;
+                txtMin.Text = obj.Freefield4.ToString();
+                txtMax.Text = obj.Freefield5.ToString();
+                txtYear.Text = obj.Freefield6.ToString();
             }
         }
         private void ChangeControlStatus(ActionStatus status)
@@ -251,6 +289,9 @@ namespace Interface
                     txtMasterDataName.ReadOnly = true;
                     txtSTT.ReadOnly = true;
                     txtDescription.ReadOnly = true;
+                    lkpParentId.ReadOnly = true;
+                    txtMax.ReadOnly = true;
+                    txtMax.ReadOnly = true;
                     break;
                 case ActionStatus.Update:
                     layoutCancle.Visibility = LayoutVisibility.Always;
@@ -264,6 +305,9 @@ namespace Interface
                     txtMasterDataName.ReadOnly = false;
                     txtSTT.ReadOnly = false;
                     txtDescription.ReadOnly = false;
+                    lkpParentId.ReadOnly = false;
+                    txtMax.ReadOnly = false;
+                    txtMax.ReadOnly = false;
                     break;
                 case ActionStatus.AddNew:
                     layoutCancle.Visibility = LayoutVisibility.Always;
@@ -276,6 +320,10 @@ namespace Interface
                     txtMasterDataName.ReadOnly = false;
                     txtSTT.ReadOnly = false;
                     txtDescription.ReadOnly = false;
+                    txtMax.ReadOnly = false;
+                    txtMax.ReadOnly = false;
+                    txtYear.Enabled = false;
+                    lkpParentId.ReadOnly = false;
                     break;
             }
         }
@@ -285,6 +333,9 @@ namespace Interface
             txtMasterDataName.Text = string.Empty;
             txtDescription.Text = string.Empty;
             lkpParentId.EditValue = "";
+            txtMin.Text = "";
+            txtMax.Text = "";
+            txtYear.Text = "";
         }
 
         private void UpdateData()
@@ -409,7 +460,7 @@ namespace Interface
                     MessageBox.Show("Dữ liệu gốc không thể chỉnh sửa!", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
-                obj.UpdateBy = Lib.DataAccount.User.UserId;
+                obj.UpdateBy = BLL.DataAccount.User.UserId;
                 obj.UpdateDate = DateTime.Now;
                 if (BLL.QueryData.getInstance().Delete_DanhMuc(obj))
                 {
@@ -576,6 +627,16 @@ namespace Interface
                 MessageBox.Show("Vui lòng nhập số thứ tự để tiện sắp xếp.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 txtMasterDataName.Focus();
                 return false;
+            }
+
+            if (txtMin.Text != string.Empty && txtMax.Text != string.Empty)
+            {
+                long min = Convert.ToInt64(txtMin.Text);
+                long max = Convert.ToInt64(txtMax.Text);
+                if (max < min)
+                {
+                    MessageBox.Show("Vui lòng nhập số min nhỏ hơn số max.", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
             }
 
             return true;

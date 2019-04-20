@@ -18,14 +18,14 @@ using DevExpress.Utils;
 namespace Interface.Report
 {
 
-    public partial class UCReport_LichSuHoSoBenhAn : DevExpress.XtraEditors.XtraUserControl, IReport
+    public partial class UCReport_XuatKho : DevExpress.XtraEditors.XtraUserControl, IReport
     {
         #region  Khai báo biến toàn cục
-        private DataSet ds;
+        private DataTable dt, dt_Thuoc;
         private DateTime tuNgay = DateTime.MinValue;
         private DateTime denNgay = DateTime.MinValue;
         #endregion
-        public UCReport_LichSuHoSoBenhAn(DateTime fromDate, DateTime toDate)
+        public UCReport_XuatKho(DateTime fromDate, DateTime toDate)
         {
             InitializeComponent();
             tuNgay = fromDate;
@@ -55,7 +55,7 @@ namespace Interface.Report
                 gridViewCT.Columns.Add(GridHelper.getInstance().Format("nguoitiepnhan", "Người tiếp nhận", GridHelper.GridHelperType.TextEdit));
                 gridViewCT.Columns.Add(GridHelper.getInstance().Format("thoigian_tra_thucte", "Thời gian trả thực tế", GridHelper.GridHelperType.DateTime, Constants.DateTimeFormat));
                 gridViewCT.Columns.Add(GridHelper.getInstance().Format("detail", "Chi tiết", GridHelper.GridHelperType.TextEdit));
-                //gridViewCT.Columns.Add(GridHelper.getInstance().Format("soct_nhap", "Số chứng từ nhập", GridHelper.GridHelperType.TextEdit));
+                gridViewCT.Columns.Add(GridHelper.getInstance().Format("soct_nhap", "Số chứng từ nhập", GridHelper.GridHelperType.TextEdit));
                 gridViewCT.Columns.Add(GridHelper.getInstance().Format("create_date", "Ngày tạo", GridHelper.GridHelperType.DateTime, Constants.DateTimeFormat));
                 gridViewCT.Columns.Add(GridHelper.getInstance().Format("create_by", "Người tạo", GridHelper.GridHelperType.TextEdit));
                 //gridViewCT.Columns.Add(GridHelper.getInstance().Format("update_date", "Ngày chỉnh sửa", GridHelper.GridHelperType.DateTime, Constants.DateTimeFormat));
@@ -63,39 +63,13 @@ namespace Interface.Report
                 gridViewCT.BestFitColumns();
                 gridViewCT.EndUpdate();
             }
-            if (gridViewG.Columns.Count == 0)
-            {
-                gridViewG.BeginUpdate();
-                gridViewG.OptionsSelection.MultiSelect = true;
-                gridViewG.OptionsSelection.MultiSelectMode = GridMultiSelectMode.CellSelect;
-                gridViewG.OptionsClipboard.CopyColumnHeaders = DefaultBoolean.False;
-                gridViewG.Appearance.Row.Font = new Font(DefaultFont.FontFamily, 9.75f, FontStyle.Regular);
-                gridViewG.Appearance.HeaderPanel.Font = new Font(DefaultFont.FontFamily, 9.75f, FontStyle.Regular);
-                gridViewG.OptionsView.ColumnAutoWidth = false;
-                gridViewG.Columns.Clear();
-                gridViewG.Columns.Add(GridHelper.getInstance().Format("id", "Họ và tên", GridHelper.GridHelperType.TextEdit, "", 0, 0, false));
-                gridViewG.Columns.Add(GridHelper.getInstance().Format("soct", "Số chứng từ", GridHelper.GridHelperType.TextEdit));
-                //gridViewG.Columns.Add(GridHelper.getInstance().Format("soct_xuat", "Số chứng từ Xuất", GridHelper.GridHelperType.TextEdit));
-                gridViewG.Columns.Add(GridHelper.getInstance().Format("stt", "Số Kho", GridHelper.GridHelperType.TextEdit));
-                gridViewG.Columns.Add(GridHelper.getInstance().Format("name", "Họ và tên", GridHelper.GridHelperType.TextEdit));
-                gridViewG.Columns.Add(GridHelper.getInstance().Format("birth_day", "Ngày sinh", GridHelper.GridHelperType.TextEdit));
-                gridViewG.Columns.Add(GridHelper.getInstance().Format("id_ticket_hospital", "Số vào viện", GridHelper.GridHelperType.TextEdit));
-                gridViewG.Columns.Add(GridHelper.getInstance().Format("id_luu_tru", "Số lưu trữ", GridHelper.GridHelperType.TextEdit));
-                gridViewG.Columns.Add(GridHelper.getInstance().Format("kho_name", "Kho", GridHelper.GridHelperType.TextEdit));
-                gridViewG.Columns.Add(GridHelper.getInstance().Format("create_date", "Ngày tạo", GridHelper.GridHelperType.DateTime, Constants.DateTimeFormat));
-                gridViewG.Columns.Add(GridHelper.getInstance().Format("create_by", "Người tạo", GridHelper.GridHelperType.TextEdit));
-                //gridViewG.Columns.Add(GridHelper.getInstance().Format("update_date", "Ngày chỉnh sửa", GridHelper.GridHelperType.DateTime, Constants.DateTimeFormat));
-                //gridViewG.Columns.Add(GridHelper.getInstance().Format("update_by", "Người chỉnh sửa", GridHelper.GridHelperType.TextEdit));
-                gridViewG.BestFitColumns();
-                gridViewG.EndUpdate();
-            }
         }
         #region IReport
         void IReport.ExportExcel()
         {
             SaveFileDialog save = new SaveFileDialog();
             save.Filter = "Excel 2003|*.xls|Excel 2007|*.xlsx";
-            save.FileName = "Báo cáo lịch sử hồ sơ bệnh án";
+            save.FileName = "Báo cáo lịch sử xuất kho hồ sơ bệnh án";
             if (save.ShowDialog() == DialogResult.OK)
             {
                 if (save.FilterIndex == 1)
@@ -114,19 +88,19 @@ namespace Interface.Report
         }
         void IReport.Preview()
         {
-            //DataTable dt_X = ((DataView)gridViewCT.DataSource).ToTable();
-            //string strReport = "\\Report\\RptBaoCaoThuocCanDate.repx";
-            //    XtraReport xtra_report = new XtraReport();
-            //    xtra_report.Parameters.Clear();
-            //    string file = Application.StartupPath + strReport;
-            //    xtra_report.LoadLayout(file);
-            //    xtra_report.DataSource = dt_X;
-            //    FrmXtraReportViewer rpt = new FrmXtraReportViewer(xtra_report);
-            //    rpt.ShowDialog();
+            DataTable dt_X = ((DataView)gridViewCT.DataSource).ToTable();
+            string strReport = "\\Report\\RptBaoCaoThuocCanDate.repx";
+                XtraReport xtra_report = new XtraReport();
+                xtra_report.Parameters.Clear();
+                string file = Application.StartupPath + strReport;
+                xtra_report.LoadLayout(file);
+                xtra_report.DataSource = dt_X;
+                FrmXtraReportViewer rpt = new FrmXtraReportViewer(xtra_report);
+                rpt.ShowDialog();
         }
         string IReport.Title()
         {
-            return "Báo Cáo Lịch Sử Hồ Sơ Bệnh Án";
+            return "Báo Cáo Lịch Sử Xuất Kho Hồ Sơ Bệnh Án";
         }
         void IReport.RefeshData(DateTime tuNgay, DateTime denNgay)
         {
@@ -136,22 +110,14 @@ namespace Interface.Report
         {
             BackgroundWorker bw = new BackgroundWorker();
             frmWaiting frm = new frmWaiting();
-            bw.DoWork += delegate { ds = BLL.QueryData.getInstance().getReportLichSuHoSoBenhAn(tuNgay, denNgay); };
+            bw.DoWork += delegate { dt = BLL.QueryData.getInstance().getReportXuatKho(tuNgay, denNgay); };
             bw.RunWorkerCompleted += delegate
             {
                 frm.Close();
-                gridControl_G.BeginUpdate();
                 gridControl_CT.BeginUpdate();
                 gridControl_CT.DataSource = null;
-                gridControl_G.DataSource = null;
-
-                gridControl_G.DataSource = ds;
-                gridControl_G.DataMember = "g";
-                gridControl_CT.DataSource = ds;
-                gridControl_CT.DataMember = "g.R_ct";
-                gridControl_G.EndUpdate();
+                gridControl_CT.DataSource = dt;
                 gridControl_CT.EndUpdate();
-                gridViewG.BestFitColumns();
                 gridViewCT.BestFitColumns();
             };
             bw.RunWorkerAsync();
@@ -164,8 +130,8 @@ namespace Interface.Report
         }
         void IReport.Exit()
         {
-            if (ds != null)
-                ds.Dispose();
+            if (dt != null)
+                dt.Dispose();
             FindForm().Close();
         }
         // Khi khởi tạo.
@@ -174,22 +140,14 @@ namespace Interface.Report
             LoadLayout();
             BackgroundWorker bw = new BackgroundWorker();
             frmWaiting frm = new frmWaiting();
-            bw.DoWork += delegate { ds = BLL.QueryData.getInstance().getReportLichSuHoSoBenhAn(tuNgay,denNgay);};
+            bw.DoWork += delegate { dt = BLL.QueryData.getInstance().getReportXuatKho(tuNgay, denNgay);};
             bw.RunWorkerCompleted += delegate
             {
                 frm.Close();
-                gridControl_G.BeginUpdate();
                 gridControl_CT.BeginUpdate();
                 gridControl_CT.DataSource = null;
-                gridControl_G.DataSource = null;
-
-                gridControl_G.DataSource = ds;
-                gridControl_G.DataMember = "g";
-                gridControl_CT.DataSource = ds;
-                gridControl_CT.DataMember = "g.R_ct";
-                gridControl_G.EndUpdate();
+                gridControl_CT.DataSource = dt;
                 gridControl_CT.EndUpdate();
-                gridViewG.BestFitColumns();
                 gridViewCT.BestFitColumns();
             };
             bw.RunWorkerAsync();

@@ -9,7 +9,7 @@ using DevExpress.XtraEditors.Repository;
 using BLL_HeThong;
 
 
-namespace GPP_Application_HL
+namespace Lib
 {
     public partial class FrmReport_WithoutTime : DevExpress.XtraEditors.XtraForm
     {

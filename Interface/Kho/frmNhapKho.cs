@@ -59,7 +59,7 @@ namespace Interface
             bw.RunWorkerCompleted += delegate
             {
                 frmWait.Close();
-                
+
                 searchLookUpEdit1.Properties.View.Columns.Clear();
                 searchLookUpEdit1.Properties.View.Columns.Add((GridHelper.getInstance().Format("master_data_name", "Tên", GridHelper.GridHelperType.TextEdit, "", 0, 0)));
                 searchLookUpEdit1.Properties.View.Columns.Add((GridHelper.getInstance().Format("freefield1", "STT", GridHelper.GridHelperType.TextEdit, "", 0, 0)));
@@ -76,7 +76,7 @@ namespace Interface
                 gridControl1.EndUpdate();
 
                 ChangeControlStatus(ActionStatus.Normal);
-                
+
             };
             bw.RunWorkerAsync();
             frmWait.ShowDialog();
@@ -111,7 +111,8 @@ namespace Interface
                 gridView1.EndUpdate();
             }
         }
-        private void SetDataRowToObject(DataRow row){
+        private void SetDataRowToObject(DataRow row)
+        {
             obj = new NhapKho();
             try
             {
@@ -152,14 +153,14 @@ namespace Interface
                 obj.Updateby = DataAccount.User.UserId;
                 obj.Kho = searchLookUpEdit1.EditValue.ToString();
                 obj.Description = txtGhiChu.Text;
-                obj.Stt = txtSoLuuKho.Text;
                 obj.Soct = txtSoCT.Text;
             }
             catch (Exception)
             {
 
             }
-        }private void RefeshData()
+        }
+        private void RefeshData()
         {
             DataTable dt = new DataTable();
             dtKHO = new DataTable();
@@ -191,7 +192,6 @@ namespace Interface
                 txtBirthDay.Text = obj.Birthday;
                 searchLookUpEdit1.EditValue = obj.Kho.ToUpper();
                 txtGhiChu.Text = obj.Description;
-                txtSoLuuKho.Text = obj.Stt;
                 txtSoCT.Text = obj.Soct;
             }
         }
@@ -221,8 +221,8 @@ namespace Interface
                     txtLuuTru.ReadOnly = true;
                     txtTicketHospital.ReadOnly = true;
                     searchLookUpEdit1.ReadOnly = true;
-                    txtSoLuuKho.ReadOnly = true;
                     txtSoCT.ReadOnly = true;
+                    txtGhiChu.ReadOnly = true;
                     break;
                 case ActionStatus.Update:
                     layoutCancle.Visibility = LayoutVisibility.Always;
@@ -236,8 +236,8 @@ namespace Interface
                     txtLuuTru.ReadOnly = false;
                     txtTicketHospital.ReadOnly = false;
                     searchLookUpEdit1.ReadOnly = false;
-                    txtSoLuuKho.ReadOnly = true;
                     txtSoCT.ReadOnly = true;
+                    txtGhiChu.ReadOnly = false;
                     break;
                 case ActionStatus.AddNew:
                     layoutCancle.Visibility = LayoutVisibility.Always;
@@ -252,10 +252,44 @@ namespace Interface
                     txtLuuTru.ReadOnly = false;
                     txtTicketHospital.ReadOnly = false;
                     searchLookUpEdit1.ReadOnly = false;
-                    txtSoLuuKho.ReadOnly = true;
                     txtSoCT.ReadOnly = true;
+                    txtGhiChu.ReadOnly = false;
                     break;
             }
+        }
+
+        private void getKhobySoVaoVien()
+        {
+            int number = 0;
+            if (txtTicketHospital.Text == string.Empty)
+                return;
+            number = splitSoVaoVien(txtTicketHospital.Text);
+            dtKHO.DefaultView.RowFilter = $"min is not null and max is not null and min < = {number} and max >= {number}";
+            dtKHO.DefaultView.Sort = "min desc";
+            DataTable dt = dtKHO.DefaultView.ToTable();
+            if (dt != null && dt.Rows.Count > 0)
+            {
+                searchLookUpEdit1.EditValue = dt.Rows[0]["master_data_id"];
+            }
+        }
+
+        private int splitSoVaoVien(string str)
+        {
+            string returnStr = string.Empty;
+            string[] lst = str.Split('/');
+            if (lst != null && lst.Count() > 0)
+            {
+                try
+                {
+                    return Convert.ToInt32(lst[0]);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Vui lòng nhập đúng định dạng của số vào viện: " + ex.Message, "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+            }
+
+            return -9999;
         }
 
         #region Event
@@ -264,19 +298,18 @@ namespace Interface
             ChangeControlStatus(ActionStatus.AddNew);
             clearControl();
             //Lấy số ct
-            txtSoCT.Text = QueryData.autoCreatedHandleId(DateTime.Now.ToString("yyMMdd"), "soct", QueryData.tableNhapKho);
+            txtSoCT.Text = QueryData.autoCreatedHandleId("HDN." + DateTime.Now.ToString("yyMMdd"), "soct", QueryData.tableNhapKho);
         }
 
         private void clearControl()
         {
-            txtSoLuuKho.Text = "";
             txtBirthDay.Text = "";
             txtGhiChu.Text = "";
             txtName.Text = "";
             txtSoCT.Text = "";
-            txtSoLuuKho.Text = "";
             txtTicketHospital.Text = "";
             searchLookUpEdit1.EditValue = "";
+            txtLuuTru.Text = "";
         }
 
         private void btnEdit_Click(object sender, EventArgs e)
@@ -303,7 +336,8 @@ namespace Interface
                     }
                 }
             }
-        }private void btnSave_Click(object sender, EventArgs e)
+        }
+        private void btnSave_Click(object sender, EventArgs e)
         {
             if (currentActionStatus == ActionStatus.Normal) return;
             if (currentActionStatus == ActionStatus.Update)
@@ -370,15 +404,15 @@ namespace Interface
         }
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
-            if (keyData == Keys.Control && keyData == Keys.S && (currentActionStatus == ActionStatus.AddNew || currentActionStatus == ActionStatus.Update))
+            if (keyData ==(Keys.Control | Keys.S) && (currentActionStatus == ActionStatus.AddNew || currentActionStatus == ActionStatus.Update))
             {
                 btnSave_Click(new object(), EventArgs.Empty);
             }
-            if (keyData == Keys.Control && keyData == Keys.E && currentActionStatus == ActionStatus.Normal)
+            if (keyData == (Keys.Control | Keys.E) && currentActionStatus == ActionStatus.Normal)
             {
                 btnEdit_Click(new object(), EventArgs.Empty);
             }
-            if (keyData == Keys.Control && keyData == Keys.N && currentActionStatus == ActionStatus.Normal)
+            if (keyData == (Keys.Control |  Keys.N) && currentActionStatus == ActionStatus.Normal)
             {
                 btnNew_Click(new object(), EventArgs.Empty);
             }
@@ -390,14 +424,14 @@ namespace Interface
             {
                 btnRefesh_Click(new object(), EventArgs.Empty);
             }
-            if (keyData == Keys.Delete && currentActionStatus == ActionStatus.Normal)
+            if (keyData == (Keys.Control | Keys.Delete) && currentActionStatus == ActionStatus.Normal)
             {
                 btnDelete_Click(new object(), EventArgs.Empty);
             }
             return base.ProcessCmdKey(ref msg, keyData);
         }
 
-        private void searchLookUpEdit1_EditValueChanged(object sender, EventArgs e)
+        /*private void searchLookUpEdit1_EditValueChanged(object sender, EventArgs e)
         {
             if (currentActionStatus == ActionStatus.AddNew && dtKHO.Columns.Contains("master_data_id"))
             {
@@ -409,11 +443,23 @@ namespace Interface
                 }
                 dtKHO.DefaultView.RowFilter = string.Empty;
             }
+        }*/
+        private void txtTicketHospital_EditValueChanged(object sender, EventArgs e)
+        {
+            if (currentActionStatus == ActionStatus.AddNew)
+                getKhobySoVaoVien();
         }
-
 
         #endregion
 
-
+        private void txtTicketHospital_Validated(object sender, EventArgs e)
+        {
+            if (!QueryData.getInstance().CheckSoNhapVien(txtTicketHospital.Text))
+            {
+                MessageBox.Show("Số nhập viện là số duy nhất. Vui lòng nhập lại", "Thông báo", MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                return;
+            }
+        }
     }
 }

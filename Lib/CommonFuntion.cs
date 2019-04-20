@@ -11,7 +11,6 @@ using DevExpress.XtraGrid.Views.Grid;
 using DevExpress.XtraEditors.Repository;
 using DevExpress.XtraGrid.Columns;
 using System.Security.Cryptography;
-using BLL.DO;
 using DevExpress.XtraGrid.Views.Base;
 using System.Collections;
 using System.Drawing;
@@ -70,47 +69,6 @@ namespace Lib
             return sb.ToString();
         }
 
-        public static string CreateId(string sInputMax, int iLenght, string sPrefix)
-        {
-            if (sInputMax == null || (sInputMax != null && sInputMax == ""))
-            {
-                sInputMax = "0";
-            }
-            else
-            {
-                string[] list = sInputMax.Split('.');
-                if (list.Length > 0)
-                {
-                    sInputMax = list[list.Length - 1];
-                }
-                else
-                {
-                    sInputMax = "0";
-                }
-            }
-            try
-            {
-                string sOut = "";
-                int iCurId = int.Parse(sInputMax);
-                if (iCurId <= 0)
-                    iCurId = 1;
-                else
-                    iCurId = iCurId + 1;
-                sOut = iCurId.ToString();
-                int iMustLenght = iLenght - sOut.Length;
-                for (int i = 0; i < iMustLenght; i++)
-                {
-                    sOut = "0" + sOut;
-                }
-                return sPrefix + "." + sOut;
-            }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-        }
-       
-      
     }
     public static class Constants
     {
@@ -123,16 +81,7 @@ namespace Lib
         public const string DateFormat = "dd/MM/yyyy";
     }
 
-    public static class DataAccount
-    {
-        public static BLL.DO.User user;
-
-        public static User User
-        {
-            get { return user; }
-            set { user = value; }
-        }
-    }
+    
 
     public class GridHelper
     {
@@ -160,7 +109,8 @@ namespace Lib
             DateTime = 2,
             LookupEdit = 3,
             TextEdit = 4,
-            HTML = 5
+            HTML = 5,
+            CheckEdit = 6
         }
 
         public GridColumn Format(string field, string name, GridHelperType type, string displayFormat = "", int colWidth = 0, int maxWidth = 0, bool visible = true, bool readOnly = true, bool allowEdit = false, bool wrapHeader = false)
@@ -201,6 +151,11 @@ namespace Lib
                         richEdit.OptionsHorizontalScrollbar.Visibility = RichEditScrollbarVisibility.Auto;
                         richEdit.OptionsVerticalScrollbar.Visibility = RichEditScrollbarVisibility.Auto;
                         col.ColumnEdit = richEdit;
+                        break;
+                    case GridHelperType.CheckEdit:
+                        RepositoryItemCheckEdit checkEdit = new RepositoryItemCheckEdit();
+                        checkEdit.ReadOnly = readOnly;
+                        col.ColumnEdit = checkEdit;
                         break;
 
                 }

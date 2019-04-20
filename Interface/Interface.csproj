@@ -63,6 +63,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Danh Muc\frmDanhMucUser.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Danh Muc\frmDanhMucUser.Designer.cs">
+      <DependentUpon>frmDanhMucUser.cs</DependentUpon>
+    </Compile>
     <Compile Include="Danh Muc\frmDanhMuc.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -94,8 +100,23 @@
     <Compile Include="Report\UCReport_LichSuHoSoBenhAn.Designer.cs">
       <DependentUpon>UCReport_LichSuHoSoBenhAn.cs</DependentUpon>
     </Compile>
+    <Compile Include="Report\UCReport_XuatKho.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Report\UCReport_XuatKho.Designer.cs">
+      <DependentUpon>UCReport_XuatKho.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Report\UCReport_NhapKho.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Report\UCReport_NhapKho.Designer.cs">
+      <DependentUpon>UCReport_NhapKho.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Danh Muc\frmDanhMucUser.resx">
+      <DependentUpon>frmDanhMucUser.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Danh Muc\frmDanhMuc.resx">
       <DependentUpon>frmDanhMuc.cs</DependentUpon>
     </EmbeddedResource>
@@ -111,6 +132,12 @@
     <EmbeddedResource Include="Properties\licenses.licx" />
     <EmbeddedResource Include="Report\UCReport_LichSuHoSoBenhAn.resx">
       <DependentUpon>UCReport_LichSuHoSoBenhAn.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Report\UCReport_XuatKho.resx">
+      <DependentUpon>UCReport_XuatKho.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Report\UCReport_NhapKho.resx">
+      <DependentUpon>UCReport_NhapKho.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

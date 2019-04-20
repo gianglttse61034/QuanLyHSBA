@@ -17,6 +17,5 @@ namespace BLL_HeThong
         void Exit();
         void Load();
 
-
     }
 }

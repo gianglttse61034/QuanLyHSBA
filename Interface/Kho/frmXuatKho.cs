@@ -355,7 +355,7 @@ namespace Interface
         {
             ChangeControlStatus(ActionStatus.AddNew);
             clearControl();
-            txtSoCT.Text = QueryData.autoCreatedHandleId(DateTime.Now.ToString("yyMMdd"), "soct", QueryData.tableXuatKho);
+            txtSoCT.Text = QueryData.autoCreatedHandleId("HDX"+DateTime.Now.ToString("yyMMdd"), "soct", QueryData.tableXuatKho);
         }
         private void btnEdit_Click(object sender, EventArgs e)
         {
@@ -415,6 +415,7 @@ namespace Interface
                     objNhapKho.IdHdx = objXuatKho.Id;
                     objNhapKho.Updateby = DataAccount.User.UserId;
                     objNhapKho.Updatedate = DateTime.Now;
+                    objNhapKho.Description = txtGhiChu.Text;
                     if (BLL.QueryData.getInstance().UpdateTaiNhapKho(objNhapKho))
                     {
                         MessageBox.Show("Cập nhật thành công", "Thông báo", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -481,18 +482,19 @@ namespace Interface
         }
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
-            if (keyData == Keys.Control && keyData == Keys.S &&
+            
+            if (keyData == (Keys.Control |  Keys.S) &&
                 (currentActionStatus == ActionStatus.AddNew || currentActionStatus == ActionStatus.Update))
             {
                 btnSave_Click(new object(), EventArgs.Empty);
             }
 
-            if (keyData == Keys.Control && keyData == Keys.E && currentActionStatus == ActionStatus.Normal)
+            if (keyData == (Keys.Control | Keys.E) && currentActionStatus == ActionStatus.Normal)
             {
                 btnEdit_Click(new object(), EventArgs.Empty);
             }
 
-            if (keyData == Keys.Control && keyData == Keys.N && currentActionStatus == ActionStatus.Normal)
+            if (keyData == (Keys.Control | Keys.N) && currentActionStatus == ActionStatus.Normal)
             {
                 btnNew_Click(new object(), EventArgs.Empty);
             }
@@ -502,13 +504,17 @@ namespace Interface
             {
                 btnCancle_Click(new object(), EventArgs.Empty);
             }
+            else if(keyData == Keys.Escape)
+            {
+                this.Close();
+            }
 
             if (keyData == Keys.F5 && currentActionStatus == ActionStatus.Normal)
             {
                 btnRefesh_Click(new object(), EventArgs.Empty);
             }
 
-            if (keyData == Keys.Delete && currentActionStatus == ActionStatus.Normal)
+            if (keyData == (Keys.Control| Keys.Delete) && currentActionStatus == ActionStatus.Normal)
             {
                 btnDelete_Click(new object(), EventArgs.Empty);
             }

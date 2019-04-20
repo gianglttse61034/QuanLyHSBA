@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace DAL
 {
-    public class ConnectData 
+    public class ConnectData
     {
         private static SqlConnection Conn;
         private static ConnectData _instance = null;
@@ -72,12 +72,39 @@ namespace DAL
                 da.Fill(ds);
                 Conn.Close();
             }
-            catch (Exception )
+            catch (Exception)
             {
 
             }
             return ds.Tables[0];
 
+        }
+        public int ExecuteNonQuery(string str, CommandType type_cmd, params object[] par)
+        {
+            int kq = -1;
+            try
+            {
+                Connect();
+                SqlCommand cmd = new SqlCommand(str, Conn);
+                cmd.CommandType = type_cmd;
+                for (int i = 0; i < par.Length; i = i + 3)
+                {
+                    string name = par[i].ToString();
+                    SqlDbType type = (SqlDbType)par[i + 1];
+                    object value = par[i + 2];
+                    cmd.Parameters.Add(name, type);
+                    cmd.Parameters[name].Value = value;
+                }
+
+                kq = cmd.ExecuteNonQuery();
+                Conn.Close();
+            }
+            catch (Exception)
+            {
+
+            }
+
+            return kq;
         }
         public DataSet ExecuteToDataSet(string str, CommandType type_cmd, params object[] par)
         {
@@ -134,7 +161,7 @@ namespace DAL
                 SqlDbType type = (SqlDbType)arr[i + 1];
                 object value = arr[i + 2];
                 cmd.Parameters.Add(name, type);
-                cmd.Parameters[name].Value = value;
+                cmd.Parameters[name].Value = value == null ? DBNull.Value : value;
             }
             try
             {
@@ -175,7 +202,7 @@ namespace DAL
                 SqlDbType type = (SqlDbType)arr[i + 1];
                 object value = arr[i + 2];
                 cmd.Parameters.Add(name, type);
-                cmd.Parameters[name].Value = value;
+                cmd.Parameters[name].Value = value == null ? DBNull.Value : value; ;
             }
             try
             {
